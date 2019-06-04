@@ -7,13 +7,13 @@ export default function Form(props) {
   return (
     <div>
       <div className="form-title">
-        <input type="text" {...title} placeholder='title'/>
+        <input type="text" {...title} placeholder='TITLE'/>
       </div>
       <div className="form-content">
-        <input type="text" {...content} placeholder='content'/>
+        <input type="text" {...content} placeholder='CONTENT'/>
       </div>
 
-      <button className="form-btn" onClick={() => {props.createContext(title.value,content.value)}}>ADD</button>
+      <button className="form-btn" onClick={() => {props.createContext(title.value,content.value)}}>UPDATE</button>
     </div>
   )
 }
