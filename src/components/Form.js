@@ -10,7 +10,7 @@ export default function Form(props) {
         <input type="text" {...title} placeholder='title'/>
       </div>
       <div className="form-content">
-        <input type="text" {...content} placeholder='content'/>
+        <textarea type="text" {...content} placeholder='content'/>
       </div>
 
       <button className="form-btn" onClick={() => {props.createContext(title.value,content.value)}}>ADD</button>
