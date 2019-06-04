@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import note from '../lib/note-service'
+import note from '../lib/note-service';
+import Form from './Form.js';
 
 export default class Todo extends Component {
   state = {
@@ -7,6 +8,10 @@ export default class Todo extends Component {
     editTitle: '',
     editContent: '',
     editIndex: '',
+  }
+  handleUpdate = (title,content) => {
+    console.log('create',title)
+    note.addNote(title,content)
   }
   componentDidMount() {
     note.getNotes()
@@ -18,7 +23,7 @@ export default class Todo extends Component {
     return (
       <div>
         <h1>TO DO LIST</h1>
-        <button>ADD</button>
+          <Form createContext={this.handleUpdate}/>
         
       </div>
     )

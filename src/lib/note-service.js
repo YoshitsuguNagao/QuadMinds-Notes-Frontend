@@ -13,6 +13,12 @@ class Note {
     return this.note.get(`/notes`)
       .then(({ data }) => data);
   };
+
+  addNote(title,content) {
+    console.log('addNote')
+    return this.note.post(`/notes`,{title,content})
+      .then(({ data }) => data);
+  };
 };
 
 const note = new Note();
