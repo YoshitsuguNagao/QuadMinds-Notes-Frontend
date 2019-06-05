@@ -13,6 +13,11 @@ class Note {
       .then(({ data }) => data);
   };
 
+  getNote(id) {
+    return this.note.get(`/notes/${id}`)
+      .then(({ data }) => data);
+  };
+
   addNote(title,content) {
     return this.note.post(`/notes`,{title,content})
       .then(({ data }) => data);

@@ -19,10 +19,6 @@ input[type=checkbox]:checked + label {
   text-decoration: line-through;
 }
 
-input[type=checkbox]:checked + p {
-  text-decoration: line-through;
-}
-
 .title-label {
   padding-left: 1rem;
 }
