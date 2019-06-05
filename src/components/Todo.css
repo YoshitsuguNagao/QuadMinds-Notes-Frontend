@@ -3,7 +3,6 @@
   text-align: left;
   background-color: white;
   margin: 0.5rem auto;
-  padding: 0 0.5rem;
   border-radius: 5px;
   box-shadow: 10px 10px 10px 0 rgba(0, 0, 0 , .3)
 }
@@ -15,3 +14,16 @@
 .note-form input, .note-form textarea {
   margin: 0.75rem auto;
 }
+
+input[type=checkbox]:checked + label {
+  text-decoration: line-through;
+}
+
+input[type=checkbox]:checked + p {
+  text-decoration: line-through;
+}
+
+.title-label {
+  padding-left: 1rem;
+}
+

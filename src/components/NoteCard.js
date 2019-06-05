@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import './Todo.css';
-import { Card,ButtonToolbar } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
+import { Card, Button, ButtonToolbar } from 'react-bootstrap';
+import {  } from 'react-bootstrap';
 
 export default class NoteCard extends Component {
   render() {
-    const { title, content } = this.props.note
+    const { title, content, done } = this.props.note
     return (
       <>
        <Card className='note-card'>
          <Card.Body className='note-body'>
-          <Card.Title>{title}</Card.Title>
+          <Card.Title>
+            <input type="checkbox" id="cbox1" checked={done} onChange={() => {this.props.handleCheck(this.props.index)}}/><label className='title-label' htmlFor="cbox1"> {title} </label>
+            </Card.Title>
           <Card.Text>{content}</Card.Text>
           <ButtonToolbar>
             <Button variant="success" onClick={() => {this.props.handleEdit(this.props.index)}}>Edit</Button>

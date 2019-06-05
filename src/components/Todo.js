@@ -50,8 +50,12 @@ export default class Todo extends Component {
     } else {
       note.updateNote(_id, title, content)
     }
+    const newNotes = this.state.notes
+    const newNote = {...this.state.notes[index],title: newTitle,content: newContent}
+    newNotes[index] = newNote;
     this.setState({
       editIndex: '',
+      notes: newNotes,
     })
   }
 
@@ -59,6 +63,17 @@ export default class Todo extends Component {
     this.setState({
       editIndex: '',
       displayForm: !this.state.displayForm
+    })
+  }
+
+  handleCheck = (index) => {
+    const { _id, done } = this.state.notes[index]
+    note.patchNote(_id,'done',!done)
+    const newNotes = this.state.notes
+    const newNote = {...this.state.notes[index],done: !done}
+    newNotes[index] = newNote;
+    this.setState({
+      notes: newNotes,
     })
   }
 
@@ -84,7 +99,7 @@ export default class Todo extends Component {
           {
             notes.map((note,index)=> {
               if(editIndex !== index) {
-                return <NoteCard key={index} index={index} note={note} handleDelete={this.handleDelete} handleEdit={this.handleEdit}/>
+                return <NoteCard key={index} index={index} note={note} handleDelete={this.handleDelete} handleEdit={this.handleEdit} handleCheck={this.handleCheck}/>
               } else {
                 return <EditNoteCard key={index} index={index} note={note} handleUpdate={this.handleUpdate}/>
               }

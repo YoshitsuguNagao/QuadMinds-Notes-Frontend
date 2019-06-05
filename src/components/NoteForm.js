@@ -8,8 +8,8 @@ export default function NoteForm(props) {
   return (
     <Form className='note-card'>
       <div className='note-form'>
-        <Form.Control type="text" placeholder="title" {...title} required='true'/>
-        <Form.Control as="textarea" rows="3" placeholder="content" {...content} required='true'/>
+        <Form.Control type="text" placeholder="title" {...title} required={true}/>
+        <Form.Control as="textarea" rows="3" placeholder="content" {...content} required={true}/>
         <Button variant="primary" onClick={() => {props.createContext(title.value,content.value)}}>Add</Button>
       </div>
     </Form>
