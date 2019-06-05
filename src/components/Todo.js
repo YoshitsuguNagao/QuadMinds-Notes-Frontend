@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import note from '../lib/note-service';
-import Form from './Form';
+import NoteForm from './NoteForm';
 import NoteCard from './NoteCard'
 import EditNoteCard from './EditNoteCard'
-import { CardDeck } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 
 export default class Todo extends Component {
   state = {
     notes: [],
     editIndex: '',
+    displayForm: false,
   }
 
   handleAdd = (title,content) => {
@@ -17,7 +18,8 @@ export default class Todo extends Component {
     note.addNote(title,content)
     .then((newNote) => {
       this.setState({
-        notes: [...notes, newNote]
+        notes: [...notes, newNote],
+        displayForm: !this.state.displayForm
       })
     })
 
@@ -34,7 +36,8 @@ export default class Todo extends Component {
 
   handleEdit = (index) => {
     this.setState({
-      editIndex: index
+      editIndex: index,
+      displayForm: false,
     })
   }
 
@@ -52,6 +55,13 @@ export default class Todo extends Component {
     })
   }
 
+  handleForm = () => {
+    this.setState({
+      editIndex: '',
+      displayForm: !this.state.displayForm
+    })
+  }
+
   componentDidMount() {
     note.getNotes()
       .then(notes => {
@@ -61,23 +71,16 @@ export default class Todo extends Component {
     })
   }
 
-  componentDidUpdate() {
-    note.getNotes()
-      .then(notes => {
-        this.setState({
-          notes
-        })
-    })
-  }
-
   render() {
-    const { notes, editIndex } = this.state;
+    const { notes, editIndex, displayForm } = this.state;
     return (
       <div>
         <h1>TO DO LIST</h1>
-        <Form createContext={this.handleAdd}/>
+        {
+          displayForm ? <NoteForm createContext={this.handleAdd}/>
+          :<Button variant="primary" onClick={this.handleForm}>Add New Note</Button>
+        }
         <div className="note-list">
-        <CardDeck>
           {
             notes.map((note,index)=> {
               if(editIndex !== index) {
@@ -87,7 +90,6 @@ export default class Todo extends Component {
               }
             })
           }
-          </CardDeck>
         </div>
       </div>
     )
