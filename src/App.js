@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Todo from './components/Todo';
+import note from './lib/note-service';
 
-
-function App() {
-  return (
-    <div className="App">
-      <Todo />
-    </div>
-  );
+class App  extends Component {
+  state = {
+    notes: []
+  }
+  componentDidMount() {
+    note.getNotes()
+      .then(notes => {
+        this.setState({
+          notes
+        })
+    })
+  }
+  render() {
+    return (
+      <div className="App">
+        <Todo notes={this.state.notes}/>
+      </div>
+    );
+  }
 }
 
 export default App;

@@ -6,8 +6,9 @@ import {  } from 'react-bootstrap';
 export default class NoteCard extends Component {
   render() {
     const { title, content, done } = this.props.note
+    console.log('title', title)
     return (
-      <>
+      <li>
        <Card className='note-card'>
          <Card.Body className='note-body'>
           <Card.Title>
@@ -20,7 +21,7 @@ export default class NoteCard extends Component {
           </ButtonToolbar>
         </Card.Body>
       </Card>
-      </>
+      </li>
     )
   }
 }

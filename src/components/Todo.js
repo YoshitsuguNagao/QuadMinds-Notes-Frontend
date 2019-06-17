@@ -4,6 +4,7 @@ import NoteForm from './NoteForm';
 import NoteCard from './NoteCard'
 import EditNoteCard from './EditNoteCard'
 import { Button } from 'react-bootstrap';
+import Sortable from '../Sortable';
 
 
 export default class Todo extends Component {
@@ -11,6 +12,7 @@ export default class Todo extends Component {
     notes: [],
     editIndex: '',
     displayForm: false,
+    simpleList: [ 2, 3, 4, 5, 6, 190000],
   }
 
   handleAdd = (title,content) => {
@@ -22,7 +24,6 @@ export default class Todo extends Component {
         displayForm: !this.state.displayForm
       })
     })
-
   }
 
   handleDelete = (index) => {
@@ -85,9 +86,24 @@ export default class Todo extends Component {
         })
     })
   }
+  componentWillMount() {
+    note.getNotes()
+      .then(notes => {
+        this.setState({
+          notes
+        })
+    })
+  }
 
   render() {
     const { notes, editIndex, displayForm } = this.state;
+    const simpleList = this.state.simpleList.map((val, key) => (
+      <li key={key} data-id={val}>List Item {val}</li>
+    ));
+    console.log('this.state.notes.length', this.state.notes.length)
+    const noteList = this.state.notes.map((note,index) => (
+      <NoteCard key={index} data-id={index} index={index} note={note} handleDelete={this.handleDelete} handleEdit={this.handleEdit} handleCheck={this.handleCheck} />
+    ));
     return (
       <div>
         <h1>TO DO LIST</h1>
@@ -96,7 +112,32 @@ export default class Todo extends Component {
           :<Button variant="primary" onClick={this.handleForm}>Add New Note</Button>
         }
         <div className="note-list">
-          {
+        <Sortable
+            options={{
+              animation: 150
+            }}
+            className="block-list"
+            ref={c => {
+              if (c) {
+                this.simpleList = c.sortable;
+              }
+            }}
+            tag="ul"
+          >
+            {/* {simpleList} */}
+            {noteList}
+            {/* {
+            notes.map((note,index)=> {
+              console.log('note', note)
+              if(editIndex !== index) {
+                return <NoteCard key={index} index={index} note={note} handleDelete={this.handleDelete} handleEdit={this.handleEdit} handleCheck={this.handleCheck}/>
+              } else {
+                return <EditNoteCard key={index} index={index} note={note} handleUpdate={this.handleUpdate}/>
+              }
+            })
+          } */}
+          </Sortable>
+          {/* {
             notes.map((note,index)=> {
               if(editIndex !== index) {
                 return <NoteCard key={index} index={index} note={note} handleDelete={this.handleDelete} handleEdit={this.handleEdit} handleCheck={this.handleCheck}/>
@@ -104,7 +145,7 @@ export default class Todo extends Component {
                 return <EditNoteCard key={index} index={index} note={note} handleUpdate={this.handleUpdate}/>
               }
             })
-          }
+          } */}
         </div>
       </div>
     )
