@@ -3,8 +3,9 @@ import note from '../lib/note-service';
 import NoteForm from './NoteForm';
 import NoteCard from './NoteCard'
 import EditNoteCard from './EditNoteCard'
-import { Button } from 'react-bootstrap';
 import Sortable from '../Sortable';
+import { Modal, Button } from 'react-bootstrap';
+import AlertNote from './AlertNote';
 
 
 export default class Todo extends Component {
@@ -13,17 +14,25 @@ export default class Todo extends Component {
     editIndex: '',
     displayForm: false,
     simpleList: [ 2, 3, 4, 5, 6, 190000],
+    show: false,
   }
 
   handleAdd = (title,content) => {
     const { notes } = this.state
-    note.addNote(title,content)
-    .then((newNote) => {
+    if(title === "" || content === "") {
       this.setState({
-        notes: [...notes, newNote],
-        displayForm: !this.state.displayForm
+        show: true
       })
-    })
+    } else {
+      note.addNote(title,content)
+      .then((newNote) => {
+        this.setState({
+          notes: [...notes, newNote],
+          displayForm: !this.state.displayForm
+        })
+      })
+    }
+
   }
 
   handleDelete = (index) => {
@@ -77,6 +86,13 @@ export default class Todo extends Component {
       notes: newNotes,
     })
   }
+  handleClose = () => {
+    this.setState({ show: false });
+  }
+
+  handleShow = () => {
+    this.setState({ show: true });
+  }
 
   componentDidMount() {
     note.getNotes()
@@ -86,14 +102,14 @@ export default class Todo extends Component {
         })
     })
   }
-  componentWillMount() {
-    note.getNotes()
-      .then(notes => {
-        this.setState({
-          notes
-        })
-    })
-  }
+  // componentWillMount() {
+  //   note.getNotes()
+  //     .then(notes => {
+  //       this.setState({
+  //         notes
+  //       })
+  //   })
+  // }
 
   render() {
     const { notes, editIndex, displayForm } = this.state;
@@ -107,12 +123,25 @@ export default class Todo extends Component {
     return (
       <div>
         <h1>TO DO LIST</h1>
+
+        <Modal show={this.state.show} onHide={this.handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Ooops!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Please enter title and content</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={this.handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
         {
           displayForm ? <NoteForm createContext={this.handleAdd}/>
           :<Button variant="primary" onClick={this.handleForm}>Add New Note</Button>
         }
         <div className="note-list">
-        <Sortable
+        {/* <Sortable
             options={{
               animation: 150
             }}
@@ -124,9 +153,9 @@ export default class Todo extends Component {
             }}
             tag="ul"
           >
-            {/* {simpleList} */}
+            {simpleList}
             {noteList}
-            {/* {
+            {
             notes.map((note,index)=> {
               console.log('note', note)
               if(editIndex !== index) {
@@ -135,9 +164,9 @@ export default class Todo extends Component {
                 return <EditNoteCard key={index} index={index} note={note} handleUpdate={this.handleUpdate}/>
               }
             })
-          } */}
-          </Sortable>
-          {/* {
+          }
+          </Sortable> */}
+          {
             notes.map((note,index)=> {
               if(editIndex !== index) {
                 return <NoteCard key={index} index={index} note={note} handleDelete={this.handleDelete} handleEdit={this.handleEdit} handleCheck={this.handleCheck}/>
@@ -145,7 +174,7 @@ export default class Todo extends Component {
                 return <EditNoteCard key={index} index={index} note={note} handleUpdate={this.handleUpdate}/>
               }
             })
-          } */}
+          }
         </div>
       </div>
     )
