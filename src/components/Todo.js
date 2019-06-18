@@ -4,8 +4,6 @@ import NoteForm from './NoteForm';
 import NoteCard from './NoteCard'
 import EditNoteCard from './EditNoteCard'
 import { Modal, Button } from 'react-bootstrap';
-import AlertNote from './AlertNote';
-
 
 export default class Todo extends Component {
   state = {
@@ -51,20 +49,26 @@ export default class Todo extends Component {
 
   handleUpdate = (index,newTitle,newContent) => {
     const { _id, title, content } = this.state.notes[index]
-    if(title !== newTitle) {
-      note.patchNote(_id,'title',newTitle)
-    } else if(content !== newContent) {
-      note.patchNote(_id,'content',newContent)
+    if(newTitle === "" || newContent === "") {
+      this.setState({
+        show: true
+      })
     } else {
-      note.updateNote(_id, title, content)
+      if(title !== newTitle) {
+        note.patchNote(_id,'title',newTitle)
+      } else if(content !== newContent) {
+        note.patchNote(_id,'content',newContent)
+      } else {
+        note.updateNote(_id, title, content)
+      }
+      const newNotes = this.state.notes
+      const newNote = {...this.state.notes[index],title: newTitle,content: newContent}
+      newNotes[index] = newNote;
+      this.setState({
+        editIndex: '',
+        notes: newNotes,
+      })
     }
-    const newNotes = this.state.notes
-    const newNote = {...this.state.notes[index],title: newTitle,content: newContent}
-    newNotes[index] = newNote;
-    this.setState({
-      editIndex: '',
-      notes: newNotes,
-    })
   }
 
   handleForm = () => {
@@ -95,7 +99,7 @@ export default class Todo extends Component {
   handleCancelForm = () => {
     this.setState({ displayForm: false })
   }
-  
+
   handleCancelEdit = () => {
     this.setState({ editIndex: '' })
   }
@@ -116,16 +120,16 @@ export default class Todo extends Component {
         <h1>TO DO LIST</h1>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Ooops!</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Please enter title and contentPlease enter title and content</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={this.handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+          <Modal.Header closeButton>
+            <Modal.Title>Ooops!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Please enter title and contentPlease enter title and content</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
         {
           displayForm ? <NoteForm createContext={this.handleAdd} cancelForm={this.handleCancelForm}/>
