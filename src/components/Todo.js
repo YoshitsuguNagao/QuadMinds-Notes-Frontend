@@ -3,7 +3,8 @@ import note from '../lib/note-service';
 import NoteForm from './NoteForm';
 import NoteCard from './NoteCard'
 import EditNoteCard from './EditNoteCard'
-import { Button } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
+import AlertNote from './AlertNote';
 
 
 export default class Todo extends Component {
@@ -11,17 +12,25 @@ export default class Todo extends Component {
     notes: [],
     editIndex: '',
     displayForm: false,
+
+    show: false,
   }
 
   handleAdd = (title,content) => {
     const { notes } = this.state
-    note.addNote(title,content)
-    .then((newNote) => {
+    if(title === "" || content === "") {
       this.setState({
-        notes: [...notes, newNote],
-        displayForm: !this.state.displayForm
+        show: true
       })
-    })
+    } else {
+      note.addNote(title,content)
+      .then((newNote) => {
+        this.setState({
+          notes: [...notes, newNote],
+          displayForm: !this.state.displayForm
+        })
+      })
+    }
 
   }
 
@@ -76,6 +85,13 @@ export default class Todo extends Component {
       notes: newNotes,
     })
   }
+  handleClose = () => {
+    this.setState({ show: false });
+  }
+
+  handleShow = () => {
+    this.setState({ show: true });
+  }
 
   componentDidMount() {
     note.getNotes()
@@ -91,6 +107,19 @@ export default class Todo extends Component {
     return (
       <div>
         <h1>TO DO LIST</h1>
+
+        <Modal show={this.state.show} onHide={this.handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Ooops!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Please enter title and contentPlease enter title and content</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={this.handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
         {
           displayForm ? <NoteForm createContext={this.handleAdd}/>
           :<Button variant="primary" onClick={this.handleForm}>Add New Note</Button>
