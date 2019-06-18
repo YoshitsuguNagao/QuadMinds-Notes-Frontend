@@ -12,7 +12,6 @@ export default class Todo extends Component {
     notes: [],
     editIndex: '',
     displayForm: false,
-
     show: false,
   }
 
@@ -93,6 +92,14 @@ export default class Todo extends Component {
     this.setState({ show: true });
   }
 
+  handleCancelForm = () => {
+    this.setState({ displayForm: false })
+  }
+  
+  handleCancelEdit = () => {
+    this.setState({ editIndex: '' })
+  }
+
   componentDidMount() {
     note.getNotes()
       .then(notes => {
@@ -121,7 +128,7 @@ export default class Todo extends Component {
       </Modal>
 
         {
-          displayForm ? <NoteForm createContext={this.handleAdd}/>
+          displayForm ? <NoteForm createContext={this.handleAdd} cancelForm={this.handleCancelForm}/>
           :<Button variant="primary" onClick={this.handleForm}>Add New Note</Button>
         }
         <div className="note-list">
@@ -130,7 +137,7 @@ export default class Todo extends Component {
               if(editIndex !== index) {
                 return <NoteCard key={index} index={index} note={note} handleDelete={this.handleDelete} handleEdit={this.handleEdit} handleCheck={this.handleCheck}/>
               } else {
-                return <EditNoteCard key={index} index={index} note={note} handleUpdate={this.handleUpdate}/>
+                return <EditNoteCard key={index} index={index} note={note} handleUpdate={this.handleUpdate} cancelEdit={this.handleCancelEdit}/>
               }
             })
           }
