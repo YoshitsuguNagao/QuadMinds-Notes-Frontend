@@ -28,7 +28,6 @@ export default class Todo extends Component {
         })
       })
     }
-
   }
 
   handleDelete = (index) => {
@@ -123,7 +122,7 @@ export default class Todo extends Component {
           <Modal.Header closeButton>
             <Modal.Title>Ooops!</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Please enter title and contentPlease enter title and content</Modal.Body>
+          <Modal.Body>Please enter title and content</Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleClose}>
               Close

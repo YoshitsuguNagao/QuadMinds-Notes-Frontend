@@ -10,7 +10,10 @@ class Note {
 
   getNotes() {
     return this.note.get(`/notes`)
-      .then(({ data }) => data);
+      .then(({ data }) => {
+        return data
+      }
+      );
   };
 
   getNote(id) {
