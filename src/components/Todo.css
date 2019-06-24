@@ -23,3 +23,6 @@ input[type=checkbox]:checked + label {
   padding-left: 1rem;
 }
 
+.note-list li {
+  list-style: none;
+}
